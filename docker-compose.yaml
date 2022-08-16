@@ -31,8 +31,6 @@ services:
           - frontend
       env_file:
           - .env
-      ports:
-        - "80:80"
       labels:
           - "traefik.enable=true"
           - "traefik.http.routers.spectr.rule=Host(`spectr.dev.andyi95.com`)"
