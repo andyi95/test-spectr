@@ -4,11 +4,10 @@
     <div v-if="errors">
     <div class="alert alert-danger" v-for="error in errors" v-bind:key="error.id">
       {{ error }}</div></div>
-    <div class="col-md-6">
-    <input type="text" v-model="email" placeholder="email" class="form-control"/></div>
-    <div class="col-md-6">
-      <input type="text" v-model="phone" placeholder="phone" class="form-control"/></div>
-    <div class="col-md-6"><textarea v-model="message" placeholder="Сообщение" class="form-control"/></div>
+    <BaseField placeholder="email" v-model="email"/>
+    <BaseField placeholder="номер телефона" v-model="phone"/>
+    <BaseField placeholder="сообщение" v-model="message"/>
+
     <div class="col-md-6">
       <button @click="submitData" class="btn btn-primary">Отправить</button></div>
     </div>
@@ -18,6 +17,9 @@
           <p>Email: {{item.email}} </p>
           <p>Номер телефона: {{item.phone}}</p>
           <p>Сообщение: {{item.message}}</p>
+        <div class="col-md-6">
+          <button @click="deleteItem(item.id)" class="btn btn-danger">Удалить</button>
+        </div>
       </div>
       </div>
     </div>
@@ -25,10 +27,14 @@
 
 <script>
 import {api} from "@/helpers/api";
+import BaseField from "@/components/BaseField";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Form',
+  components:{
+    BaseField
+  },
   data() {
     return {
       items: [],
@@ -57,6 +63,9 @@ export default {
       ).catch(e => {
         console.log(e)
       })
+    },
+    deleteItem(item_id){
+      api.delete('form/' + item_id).then(this.updateItems)
     }
   }
 }

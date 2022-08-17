@@ -1,8 +1,10 @@
-from rest_framework import viewsets, mixins
-from api.serializers import FormSerializer, FormWriteSerializer
-from django_filters import rest_framework as filters
+from drf_spectacular.utils import (OpenApiExample, OpenApiParameter,
+                                   OpenApiTypes, extend_schema,
+                                   extend_schema_view)
+from rest_framework import mixins, viewsets
+
 from api.models import FeedbackForm
-from drf_spectacular.utils import extend_schema_view, extend_schema, OpenApiParameter, OpenApiTypes, OpenApiExample
+from api.serializers import FormSerializer
 
 
 @extend_schema_view(
@@ -25,12 +27,9 @@ from drf_spectacular.utils import extend_schema_view, extend_schema, OpenApiPara
         responses={201: FormSerializer}
     )
 )
-class FormViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
+class FormViewSet(mixins.CreateModelMixin,
+                  mixins.RetrieveModelMixin, mixins.ListModelMixin,
+                  mixins.DestroyModelMixin, viewsets.GenericViewSet):
     queryset = FeedbackForm.objects.all()
     filterset_fields = ('email', )
     serializer_class = FormSerializer
-
-    # def get_serializer_class(self):
-    #     if self.action in ('list', 'retrieve', ):
-    #         return FormSerializer
-    #     return FormWriteSerializer
